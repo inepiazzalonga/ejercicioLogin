@@ -10,12 +10,14 @@ let imagenSubida = "";
 //home
 const home = document.querySelector(`#home`);
 const infoUsuario = document.querySelector(`#infoUsuario`)
-const fotoPerfil = document.querySelector(`#fotoPerfil`).src = imagen.src;
+const fotoPerfil = document.querySelector(`#fotoPerfil`);
 const nombrePerfil = document.querySelector(`#nombrePerfil`)
+const listaTweets = document.querySelector(`#listaTweets`)
 let usuarios = [];
 console.log(usuarios)
 
 //subir imagen de perfil
+
 imagen.addEventListener("change", function () {
     const reader = new FileReader();
     reader.addEventListener("load", () => {
@@ -27,7 +29,8 @@ imagen.addEventListener("change", function () {
 
 
 class Usuario {
-    constructor(nombre, email, password) {
+    constructor(imagen, nombre, email, password) {
+        this.imagen = imagen
         this.nombre = nombre,
             this.email = email,
             this.password = password
@@ -45,45 +48,41 @@ nombreU.addEventListener("blur", validarInput)
 emailU.addEventListener("blur", validarInput)
 passwordU.addEventListener("blur", validarInput)
 
+//registrarse
 registrar.addEventListener("click", () => {
     login.remove()
-    const nuevoUsuario = new Usuario(nombreU.value, emailU.value, passwordU.value)
+    const nuevoUsuario = new Usuario(imagenSubida, nombreU.value, emailU.value, passwordU.value)
     localStorage.setItem("usuario", JSON.stringify(nuevoUsuario))
     usuarios.push(nuevoUsuario)
     homePage()
 })
-
+const usuarioRegistrado = JSON.parse(localStorage.getItem("usuario"))
+//inicio
 function homePage() {
     login.remove()
     home.style.visibility = " visible";
-    //foto perfil
-    if (fotoPerfil.src !== "iniciar-sesion.png") {
-        fotoPerfil.src = imagen.src
-    } else {
-        fotoPerfil.src = "iniciar-sesion.png"
-    }
     //nombre
     usuarios.forEach(usuario => {
-        const nombreUsuario = document.createElement(`p`)
-        nombrePerfil.innerText = (usuario.nombre)
+        const nombrePerfil = document.createElement(`p`)
+        nombrePerfil.innerText = (usuarioRegistrado.nombre)
+        fotoPerfil.style.backgroundImage.src = (usuarioRegistrado.imagen)
     })
 }
 
 
-
-
-
 //iniciar sesion
 ingresar.addEventListener("click", () => {
-    const usuarioRegistrado = JSON.parse(localStorage.getItem("usuario")) || mostrarError("Por favor regístrese")
-    if (emailU.value === usuarioRegistrado.email && passwordU.value === usuarioRegistrado.password) {
+
+    if (emailU.value != usuarioRegistrado.email && passwordU.value != usuarioRegistrado.password) {
+        mostrarError("Por favor regístrese")
+    } else if (emailU.value === usuarioRegistrado.email && passwordU.value === usuarioRegistrado.password) {
         homePage()
     } else {
         mostrarError("Alguno de los datos ingresados es incorrecto")
-    }   
+    }
+    console.log(usuarioRegistrado)
 })
 
-console.log(usuarioRegistrado)
 
 //error
 function mostrarError(mensaje) {
@@ -94,4 +93,44 @@ function mostrarError(mensaje) {
     setTimeout(() => {
         error.remove()
     }, 3000)
+}
+
+//tweet
+let tweets = [];
+console.log(tweets)
+send.addEventListener("click", () => {
+    console.log("click")
+    const tweet = document.querySelector(`#tweet`).value
+    if (tweet == "") {
+        mostrarError("Escribe un mensaje")
+
+    } else {
+        tweets.push(tweet)
+    }
+    limpiarHTML()
+    mostrarTweets()
+})
+
+function mostrarTweets() {
+    tweets.forEach(tweet => {
+        const divTweet = document.createElement(`div`)
+        listaTweets.append(divTweet)
+        const textoTweet = document.createElement(`p`)
+        textoTweet.innerHTML=(`${usuarioRegistrado.nombre}  hace un momento: ${tweet}`)
+        textoTweet.classList.add("liTweet")
+        divTweet.append(textoTweet)
+        const borrar = document.createElement(`button`)
+        borrar.innerText=("X")
+        divTweet.append(borrar)   
+        borrar.addEventListener("click",()=>{
+            divTweet.remove()
+        })
+    })
+
+}
+
+function limpiarHTML() {
+    while (listaTweets.firstChild) {
+        listaTweets.removeChild(listaTweets.firstChild)
+    }
 }

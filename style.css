@@ -4,7 +4,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 600px;
+    height: max-content;
 }
 .main{
     width: 30em;
@@ -22,7 +22,7 @@ img{
     flex-direction: column;
     align-items: center;
     gap: 1em;
-    margin-top: 18em;
+    margin-top: 15em;  
     
 }
 #email{
@@ -47,9 +47,9 @@ img{
 #home{
     visibility: hidden;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    gap: 3em;
+    gap: 1em;
 }
 #infoUsuario{
     display: flex;
@@ -57,22 +57,30 @@ img{
     align-items: center;
 }
 #fotoPerfil{
-    height: 15em;
-    width: 15em;
+    height: 10em;
+    width:10em;
     background-size: cover;
     border-radius: 50%;
     justify-content: center;
+   margin-top: 5em;
 }
-#tweets{
+.mostrarTweets{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#index{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 1em;
+    margin-top: 1em;
 }
 #tweet{
     width: 35em;
     height: 10em;
+  
 }
 #send{
     width: 25em;
@@ -87,4 +95,19 @@ img{
     width: 28em;
     padding: 1em;
     text-align: center;
+}
+
+.liTweet{
+    background-color: white;
+    border: gray;
+    border-radius: 15px;
+    width: 20em;
+    padding: 1.5em;
+    height: 5em;
+    justify-content: center;
+    align-items: center;
+}
+.liTweet h3{
+    font-family: sans-serif;
+    font-size: 17px;
 }
